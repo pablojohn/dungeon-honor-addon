@@ -1,4 +1,4 @@
-name: Package and Release
+name: CurseForge Upload
 
 on:
   push:
@@ -8,17 +8,15 @@ on:
 jobs:
   upload:
     runs-on: ubuntu-latest
+
     steps:
     - name: Check out code
       uses: actions/checkout@v3
 
-    - name: Install Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.x'
-
     - name: Zip Addon
-      run: zip -r MyAddon.zip MyAddon/
+      run: |
+        cd src  # Navigate to the src directory
+        zip -r ../DungeonHonor.zip .  # Zip the contents of src, excluding the src folder itself
 
     - name: Upload to CurseForge
       env:
@@ -30,7 +28,7 @@ jobs:
 
         API_KEY = "${{ secrets.CURSEFORGE_API_KEY }}"
         PROJECT_ID = "your_project_id_here"
-        FILE_PATH = "./MyAddon.zip"
+        FILE_PATH = "./DungeonHonor.zip"
         metadata = {
             "changelog": "Automated update via GitHub Actions.",
             "changelogType": "markdown",
