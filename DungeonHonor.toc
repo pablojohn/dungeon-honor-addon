@@ -1,0 +1,9 @@
+## Interface: 100007
+## Title: Dungeon Honor Tooltip
+## Notes: Shows Dungeon Honor score on player tooltips
+## Version: 1.0
+## Author: Pablojohn
+
+DungeonHonorData.lua
+DungeonHonor.lua
+DungeonHonor.xml
