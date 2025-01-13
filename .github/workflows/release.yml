@@ -5,6 +5,12 @@ on:
     - cron: '0 0 * * *'  # Runs daily at midnight UTC
   workflow_dispatch:  # Allow manual triggering as well
 
+env:
+  CF_API_KEY: ${{ secrets.CF_API_KEY }}
+  WOWI_API_TOKEN: ${{ secrets.WOWI_API_TOKEN }}
+  WAGO_API_TOKEN: ${{ secrets.WAGO_API_TOKEN }}
+  GITHUB_OAUTH: ${{ secrets.GITHUB_TOKEN }}
+
 jobs:
   update-and-publish:
     runs-on: ubuntu-latest
@@ -24,14 +30,8 @@ jobs:
         run: |
           lua-syntax-check AddonFolder  # Replace with actual Lua linter or syntax checker
 
-      # Zip Addon Files
-      - name: Zip Addon Files
-        run: |
-          zip -r DungeonHonor.zip AddonFolder
-
-      # Upload to CurseForge
-      - name: Upload to CurseForge
-        env:
-          CF_API_KEY: ${{ secrets.CF_API_KEY }}
-        run: |
-          python3 scripts/upload_to_curseforge.py DungeonHonor.zip
+      # Package and Release
+      - name: Package and release
+        uses: BigWigsMods/packager@v2
+        with:
+          args: -g retail

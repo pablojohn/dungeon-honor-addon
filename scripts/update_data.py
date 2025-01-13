@@ -1,25 +1,21 @@
-import upstash_redis
 import os
 
-# Initialize Redis Client
-redis_url = os.getenv("UPSTASH_REDIS_URL")
-redis_client = redis.StrictRedis.from_url(redis_url)
-
-def fetch_player_data():
-    keys = redis_client.keys("*")  # Adjust key pattern as needed
-    players = {}
-    for key in keys:
-        players[key.decode()] = redis_client.hgetall(key)
+def get_player_data():
+    players = {
+        "PlayerOne": {b"score": b"95", b"votes": b"10"},
+        "PlayerTwo": {b"score": b"80", b"votes": b"5"},
+        "PlayerThree": {b"score": b"60", b"votes": b"8"},
+        "PlayerFour": {b"score": b"70", b"votes": b"6"},
+        "PlayerFive": {b"score": b"85", b"votes": b"12"},
+    }
     return players
 
 def write_data_file(players):
-    with open("src/DungeonHonorData.lua", "w") as lua_file:
-        lua_file.write("local PlayerData = {\n")
+    with open("../src/DungeonHonorData_Temp.lua", "w") as lua_file:
+        lua_file.write("HonorData = {\n")
         for player, data in players.items():
             lua_file.write(f'  ["{player}"] = {{ score = {data[b"score"].decode()}, votes = {data[b"votes"].decode()} }},\n')
         lua_file.write("}\n")
-        lua_file.write("return PlayerData\n")
 
-if __name__ == "__main__":
-    player_data = fetch_player_data()
-    write_data_file(player_data)
+player_data = get_player_data()
+write_data_file(player_data)
