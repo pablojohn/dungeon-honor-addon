@@ -87,7 +87,7 @@ def get_player_data():
     return player_scores
 
 def write_data_file(players):
-    with open("../src/DungeonHonorData_Temp.lua", "w") as lua_file:
+    with open("../src/DungeonHonorData.lua", "w") as lua_file:
         lua_file.write("HonorData = {\n")
         for player, data in players.items():
             lua_file.write(f'  ["{player}"] = {{ score = {data["score"]}, votes = {data["votes"]} }},\n')
