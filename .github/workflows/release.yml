@@ -14,10 +14,9 @@ env:
   GITHUB_OAUTH: ${{ secrets.GITHUB_TOKEN }}
 
 jobs:
-  environment: prod
-
   update-and-publish:
     runs-on: ubuntu-latest
+    environment: prod
 
     steps:
       # Checkout Repository
