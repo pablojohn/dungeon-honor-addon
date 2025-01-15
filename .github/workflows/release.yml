@@ -31,7 +31,7 @@ jobs:
       # Install dependencies
       - name: Install Python dependencies
         run: |
-          pip install -r scripts/requirements.txt
+          pip install upstash-redis
 
       # Fetch Updated Player Data
       - name: Fetch and Update Data File
@@ -48,17 +48,17 @@ jobs:
       # Validate Addon Files
       - name: Validate Addon Files
         run: |
-          luacheck AddonFolder  # Replace with your actual addon path
+          luacheck src
 
       # Save updated Lua file as an artifact (optional)
       - name: Upload updated Lua file
         uses: actions/upload-artifact@v3
         with:
           name: Updated Lua File
-          path: src/DungeonHonorData.lua  # Replace with your actual file path
+          path: src/DungeonHonorData.lua
 
       # Package and Release
-      - name: Package and release
-        uses: BigWigsMods/packager@v2
-        with:
-          args: -g retail
+      # - name: Package and release
+      #   uses: BigWigsMods/packager@v2
+      #   with:
+      #     args: -g retail
