@@ -86,8 +86,18 @@ def get_player_data():
 
     return player_scores
 
+import os
+
 def write_data_file(players):
-    with open("../src/DungeonHonorData.lua", "w") as lua_file:
+    # Use GITHUB_WORKSPACE or default to the current directory
+    base_path = os.getenv("GITHUB_WORKSPACE", ".")
+    file_path = os.path.join(base_path, "src/DungeonHonorData.lua")
+
+    # Ensure the directory exists
+    os.makedirs(os.path.dirname(file_path), exist_ok=True)
+
+    # Write the Lua data file
+    with open(file_path, "w") as lua_file:
         lua_file.write("HonorData = {\n")
         for player, data in players.items():
             lua_file.write(f'  ["{player}"] = {{ score = {data["score"]}, votes = {data["votes"]} }},\n')
