@@ -56,15 +56,15 @@ jobs:
         run: |
           luacheck src -g
 
-      # Save updated Lua file as an artifact (optional)
+      # Save DungeonHonor as an artifact (optional)
       - name: Upload updated Lua file
         uses: actions/upload-artifact@v3
         with:
-          name: Updated Lua File
+          name: DungeonHonor
           path: src
 
       # Package and Release
       # - name: Package and release
       #   uses: BigWigsMods/packager@v2
       #   with:
-      #     args: -g retail
+      #     args: -g src
