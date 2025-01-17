@@ -40,11 +40,16 @@ jobs:
           python3 scripts/update_data.py
         continue-on-error: false
 
-      # Install Lua syntax checker
-      - name: Install Lua syntax checker
+      # Install Lua and luarocks
+      - name: Install Lua and luarocks
         run: |
           sudo apt-get update
-          sudo apt-get install -y luacheck
+          sudo apt-get install -y lua5.1 luarocks
+
+      # Install luacheck via luarocks
+      - name: Install luacheck
+        run: |
+          sudo luarocks install luacheck
 
       # Validate Addon Files
       - name: Validate Addon Files
