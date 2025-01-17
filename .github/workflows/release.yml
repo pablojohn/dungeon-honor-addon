@@ -2,7 +2,7 @@ name: Update and Publish Addon
 
 on:
   schedule:
-    - cron: '0 0 * * *'  # Runs daily at midnight UTC
+    - cron: '0 12,0 * * *'  # Runs daily at 6am & 6pm CST
   workflow_dispatch:  # Allow manual triggering as well
 
 env:
