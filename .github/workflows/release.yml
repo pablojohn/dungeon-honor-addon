@@ -61,7 +61,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: Updated Lua File
-          path: src/DungeonHonorData.lua
+          path: src
 
       # Package and Release
       # - name: Package and release
