@@ -1,6 +1,5 @@
 -- Dungeon Honor Addon
 -- This addon will add a styled message to the character tooltip in World of Warcraft.
-
 -- Create the main frame for the addon
 local DungeonHonor = CreateFrame("Frame")
 
@@ -11,7 +10,10 @@ DungeonHonor:RegisterEvent("UPDATE_MOUSEOVER_UNIT")
 local function GetDungeonHonorScore(playerName, playerRealm)
     local key = playerName .. "-" .. playerRealm
     print("Looking up this: " .. (key or "nil"))
-    return DungeonHonorData[key] or { score = nil, votes = nil } -- Return nil if no data is found
+    return DungeonHonorData[key] or {
+        score = nil,
+        votes = nil
+    } -- Return nil if no data is found
 end
 
 -- Function to determine the color based on the score

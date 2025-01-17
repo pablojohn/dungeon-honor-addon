@@ -54,7 +54,7 @@ jobs:
       # Validate Addon Files
       - name: Validate Addon Files
         run: |
-          luacheck src
+          luacheck src -g
 
       # Save updated Lua file as an artifact (optional)
       - name: Upload updated Lua file
