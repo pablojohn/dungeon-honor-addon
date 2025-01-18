@@ -16,7 +16,7 @@ on:
 env:
   MAJOR_VERSION: 0
   MINOR_VERSION: 3
-  GAME_VERSION_ID: 6952
+  GAME_VERSION: "11.0.7"
   REDIS_URL: ${{ secrets.REDIS_URL }}
   REDIS_TOKEN: ${{ secrets.REDIS_TOKEN }}
   CF_API_KEY: ${{ secrets.CF_API_KEY }}
@@ -81,17 +81,6 @@ jobs:
           cd src
           zip -r DungeonHonor.${{ env.VERSION }}.zip .
 
-      - name: Debug CurseForge Variables
-        run: |
-          echo "API Key: [REDACTED]"
-          echo "Project ID: ${{ secrets.CURSEFORGE_PROJECT_ID }}"
-          echo "File Path: src/DungeonHonor.${{ env.VERSION }}.zip"
-          echo "Changelog: ${{ env.CHANGELOG }}"
-          echo "Game Version ID: ${{ env.GAME_VERSION_ID }}"
-          echo "Release Type: ${{ github.event.inputs.release_type }}"
-          echo "Version: ${{ env.VERSION }}"
-          echo "All variables are set correctly."
-
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
@@ -104,7 +93,7 @@ jobs:
           CURSEFORGE_PROJECT_ID: ${{ secrets.CURSEFORGE_PROJECT_ID }}
           FILE_PATH: src/DungeonHonor.${{ env.VERSION }}.zip
           CHANGELOG: ${{ env.CHANGELOG }}
-          GAME_VERSION_ID: ${{ env.GAME_VERSION_ID }}
+          GAME_VERSION: ${{ env.GAME_VERSION }}
           RELEASE_TYPE: ${{ github.event.inputs.release_type || 'release' }}
           VERSION: ${{ env.VERSION }}
         run: |
