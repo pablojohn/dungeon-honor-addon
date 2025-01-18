@@ -80,13 +80,12 @@ jobs:
         run: |
           cd src
           zip -r DungeonHonor.${{ env.VERSION }}.zip .
-        working-directory: ${{ github.workspace }}
 
       - name: Debug CurseForge Variables
         run: |
           echo "API Key: [REDACTED]"
           echo "Project ID: ${{ secrets.CURSEFORGE_PROJECT_ID }}"
-          echo "File Path: ${{ github.workspace }}/DungeonHonor.${{ env.VERSION }}.zip"
+          echo "File Path: src/DungeonHonor.${{ env.VERSION }}.zip"
           echo "Changelog: ${{ env.CHANGELOG }}"
           echo "Game Version ID: ${{ env.GAME_VERSION_ID }}"
           echo "Release Type: ${{ github.event.inputs.release_type }}"
@@ -97,7 +96,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: DungeonHonor
-          path: ${{ github.workspace }}/DungeonHonor.${{ env.VERSION }}.zip
+          path: src/DungeonHonor.${{ env.VERSION }}.zip
 
       # - name: Upload to CurseForge
       #   env:
