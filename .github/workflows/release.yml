@@ -65,10 +65,6 @@ jobs:
           echo "DATE=$DATE" >> $GITHUB_ENV
 
       - name: Generate Changelog
-        run: |
-            git log -10 --pretty=format:"%h - %s (%ci)" > changelog.txt
-
-      - name: Generate Changelog
         id: changelog
         run: |
           if [[ "${{ github.event_name }}" == "schedule" ]]; then
@@ -78,6 +74,17 @@ jobs:
           else
             echo "CHANGELOG=${{ github.event.inputs.changelog }}" >> $GITHUB_ENV
           fi
+
+      - name: Debug CurseForge Variables
+        run: |
+          echo "API Key: [REDACTED]"
+          echo "Project ID: ${{ secrets.CURSEFORGE_PROJECT_ID }}"
+          echo "File Path: ${{ github.workspace }}/addon.zip"
+          echo "Changelog: ${{ env.CHANGELOG }}"
+          echo "Game Version ID: ${{ env.GAME_VERSION_ID }}"
+          echo "Release Type: ${{ env.RELEASE_TYPE }}"
+          echo "Version: ${{ env.VERSION }}"
+          echo "All variables are set correctly."
 
       - name: Upload artifact
         uses: actions/upload-artifact@v3
