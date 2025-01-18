@@ -8,8 +8,8 @@ DungeonHonor:RegisterEvent("UPDATE_MOUSEOVER_UNIT")
 
 -- Function to fetch Dungeon Honor score from the lookup table
 local function GetDungeonHonorScore(playerName, playerRealm)
-    local key = playerName .. "-" .. playerRealm
-    print("Looking up this: " .. (key or "nil"))
+    local key = string.lower(playerName) .. "-" .. string.lower(playerRealm)
+    -- print("Looking up: " .. (key or "nil"))
     return DungeonHonorData[key] or {
         score = nil,
         votes = nil
@@ -36,7 +36,6 @@ local function AddStyledMessageToTooltip()
     -- Ensure the tooltip is showing a unit (e.g., a player or NPC)
     if UnitExists("mouseover") and UnitIsPlayer("mouseover") then
         local name, realm = UnitName("mouseover"), GetRealmName()
-        print("Name: " .. (name or "nil"))
 
         local data = GetDungeonHonorScore(name, realm)
 

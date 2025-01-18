@@ -98,7 +98,7 @@ def write_data_file(players):
 
     # Write the Lua data file
     with open(file_path, "w") as lua_file:
-        lua_file.write("HonorData = {\n")
+        lua_file.write("DungeonHonorData = {\n")
         for player, data in players.items():
             lua_file.write(f'  ["{player}"] = {{ score = {data["score"]}, votes = {data["votes"]} }},\n')
         lua_file.write("}\n")
