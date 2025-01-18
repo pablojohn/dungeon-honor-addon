@@ -8,11 +8,11 @@ def upload_to_curseforge(api_key, project_id, file_path, changelog, game_version
     }
     with open(file_path, 'rb') as addon_file:
         data = {
-            "gameVersion": game_version_id,
-            "releaseType": release_type,
             "changelog": changelog,
             "changelogType": "text",
-            "displayName": f"Version {version}"
+            "displayName": f"Version {version}",
+            "gameVersion": game_version_id,
+            "releaseType": release_type
         }
         files = {
             "file": (file_path, addon_file)
