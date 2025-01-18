@@ -98,14 +98,14 @@ jobs:
           name: DungeonHonor
           path: src/DungeonHonor.${{ env.VERSION }}.zip
 
-      # - name: Upload to CurseForge
-      #   env:
-      #     CURSEFORGE_API_KEY: ${{ secrets.CF_API_KEY }}
-      #     CURSEFORGE_PROJECT_ID: ${{ secrets.CURSEFORGE_PROJECT_ID }}
-      #     FILE_PATH: ${{ github.workspace }}/DungeonHonor.${{ env.VERSION }}.zip
-      #     CHANGELOG: ${{ env.CHANGELOG }}
-      #     GAME_VERSION_ID: ${{ env.GAME_VERSION_ID }}
-      #     RELEASE_TYPE: ${{ github.event.inputs.release_type || 'release' }}
-      #     VERSION: ${{ env.VERSION }}
-      #   run: |
-      #     python upload_to_curseforge.py
+      - name: Upload to CurseForge
+        env:
+          CURSEFORGE_API_KEY: ${{ secrets.CF_API_KEY }}
+          CURSEFORGE_PROJECT_ID: ${{ secrets.CURSEFORGE_PROJECT_ID }}
+          FILE_PATH: ${{ github.workspace }}/DungeonHonor.${{ env.VERSION }}.zip
+          CHANGELOG: ${{ env.CHANGELOG }}
+          GAME_VERSION_ID: ${{ env.GAME_VERSION_ID }}
+          RELEASE_TYPE: ${{ github.event.inputs.release_type || 'release' }}
+          VERSION: ${{ env.VERSION }}
+        run: |
+          python upload_to_curseforge.py
