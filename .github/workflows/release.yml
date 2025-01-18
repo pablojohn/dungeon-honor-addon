@@ -82,7 +82,7 @@ jobs:
           echo "File Path: ${{ github.workspace }}/addon.zip"
           echo "Changelog: ${{ env.CHANGELOG }}"
           echo "Game Version ID: ${{ env.GAME_VERSION_ID }}"
-          echo "Release Type: ${{ env.RELEASE_TYPE }}"
+          echo "Release Type: ${{ github.event.inputs.changelog }}"
           echo "Version: ${{ env.VERSION }}"
           echo "All variables are set correctly."
 
