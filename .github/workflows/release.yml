@@ -4,14 +4,21 @@ on:
   schedule:
     - cron: '0 12,0 * * *'  # Runs daily at 6am & 6pm CST
   workflow_dispatch:  # Allow manual triggering as well
+    inputs:
+      release_type:
+        description: "Release type (release, beta, alpha)"
+        required: true
+        default: "release"
+      changelog:
+        description: "Changelog for the release"
+        required: true
 
 env:
+  MAJOR_VERSION: 0
+  MINOR_VERSION: 3
   REDIS_URL: ${{ secrets.REDIS_URL }}
   REDIS_TOKEN: ${{ secrets.REDIS_TOKEN }}
   CF_API_KEY: ${{ secrets.CF_API_KEY }}
-  WOWI_API_TOKEN: ${{ secrets.WOWI_API_TOKEN }}
-  WAGO_API_TOKEN: ${{ secrets.WAGO_API_TOKEN }}
-  GITHUB_OAUTH: ${{ secrets.GITHUB_TOKEN }}
 
 jobs:
   update-and-publish:
@@ -19,52 +26,73 @@ jobs:
     environment: prod
 
     steps:
-      # Checkout Repository
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      # Set up Python
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.10'
 
-      # Install dependencies
       - name: Install Python dependencies
         run: |
           pip install upstash-redis
 
-      # Fetch Updated Player Data
       - name: Fetch and Update Data File
         run: |
           python3 scripts/update_data.py
         continue-on-error: false
 
-      # Install Lua and luarocks
       - name: Install Lua and luarocks
         run: |
           sudo apt-get update
           sudo apt-get install -y lua5.1 luarocks
 
-      # Install luacheck via luarocks
       - name: Install luacheck
         run: |
           sudo luarocks install luacheck
 
-      # Validate Addon Files
       - name: Validate Addon Files
         run: |
           luacheck src -g
 
-      # Save DungeonHonor as an artifact (optional)
-      - name: Upload updated Lua file
+      - name: Generate Version and Date
+        id: version
+        run: |
+          DATE=$(date +'%Y%m%d')
+          VERSION="$DATE.${{ env.MAJOR_VERSION }}.${{ env.MINOR_VERSION }}"
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+          echo "DATE=$DATE" >> $GITHUB_ENV
+
+      - name: Generate Changelog
+        run: |
+            git log -10 --pretty=format:"%h - %s (%ci)" > changelog.txt
+
+      - name: Generate Changelog
+        id: changelog
+        run: |
+          if [[ "${{ github.event_name }}" == "schedule" ]]; then
+            echo "CHANGELOG=Database Refresh ${{ env.DATE }}" >> $GITHUB_ENV
+          elif [[ -z "${{ github.event.inputs.changelog }}" ]]; then
+            echo "Missing changelog for manual release!" && exit 1
+          else
+            echo "CHANGELOG=${{ github.event.inputs.changelog }}" >> $GITHUB_ENV
+          fi
+
+      - name: Upload artifact
         uses: actions/upload-artifact@v3
         with:
           name: DungeonHonor
           path: src
 
-      # Package and Release
-      # - name: Package and release
-      #   uses: BigWigsMods/packager@v2
-      #   with:
-      #     args: -g src
+      # - name: Upload to CurseForge
+      # env:
+      #   CURSEFORGE_API_KEY: ${{ secrets.CURSEFORGE_API_KEY }}
+      #   CURSEFORGE_PROJECT_ID: ${{ secrets.CURSEFORGE_PROJECT_ID }}
+      #   FILE_PATH: ${{ github.workspace }}/addon.zip
+      #   CHANGELOG: ${{ env.CHANGELOG }}
+      #   GAME_VERSION_ID: 123456  # Replace with your actual game version ID
+      #   RELEASE_TYPE: ${{ github.event.inputs.release_type || 'release' }}
+      #   VERSION: ${{ env.VERSION }}
+      # run: |
+      #   python upload_to_curseforge.py
