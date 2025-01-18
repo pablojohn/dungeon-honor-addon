@@ -1,5 +1,6 @@
 import requests
 import os
+import sys
 
 def upload_to_curseforge(api_key, project_id, file_path, changelog, game_version_id, release_type, version):
     url = f"https://addons-uploads.curseforge.com/api/projects/{project_id}/upload-file"
@@ -26,6 +27,7 @@ def upload_to_curseforge(api_key, project_id, file_path, changelog, game_version
     else:
         print(f"Failed to upload addon. Status Code: {response.status_code}")
         print(response.text)
+        sys.exit(1)
 
 if __name__ == "__main__":
     # Environment variables from GitHub Actions
