@@ -93,7 +93,7 @@ jobs:
           echo "All variables are set correctly."
 
       - name: Upload artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: DungeonHonor
           path: src/DungeonHonor.${{ env.VERSION }}.zip
@@ -109,3 +109,4 @@ jobs:
           VERSION: ${{ env.VERSION }}
         run: |
           python3 scripts/upload_to_curseforge.py
+        continue-on-error: false
