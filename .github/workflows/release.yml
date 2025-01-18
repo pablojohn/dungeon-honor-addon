@@ -61,7 +61,8 @@ jobs:
         id: version
         run: |
           DATE=$(date +'%Y%m%d')
-          VERSION="${{ env.MAJOR_VERSION }}.${{ env.MINOR_VERSION }}.$DATE"
+          TIME=$(date +'%H%M')
+          VERSION="${{ env.MAJOR_VERSION }}.${{ env.MINOR_VERSION }}.$DATE$TIME"
           echo "VERSION=$VERSION" >> $GITHUB_ENV
           echo "DATE=$DATE" >> $GITHUB_ENV
 
