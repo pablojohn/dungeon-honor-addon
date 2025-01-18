@@ -12,7 +12,7 @@ def upload_to_curseforge(api_key, project_id, file_path, changelog, game_version
     metadata = {
         "changelog": changelog,
         "changelogType": "text",
-        "displayName": f"Version {version}",
+        "displayName": f"DungeonHonor.{version}",
         "gameVersion": game_version_id,
         "releaseType": release_type
     }
