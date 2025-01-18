@@ -16,6 +16,7 @@ on:
 env:
   MAJOR_VERSION: 0
   MINOR_VERSION: 3
+  GAME_VERSION_ID: 6952
   REDIS_URL: ${{ secrets.REDIS_URL }}
   REDIS_TOKEN: ${{ secrets.REDIS_TOKEN }}
   CF_API_KEY: ${{ secrets.CF_API_KEY }}
