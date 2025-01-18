@@ -1,5 +1,6 @@
 -- Dungeon Honor Addon
--- This addon will add a styled message to the character tooltip in World of Warcraft.
+-- This addon will add a styled message to the character tooltip and Premade Group Finder tooltips in World of Warcraft.
+
 -- Create the main frame for the addon
 local DungeonHonor = CreateFrame("Frame")
 
@@ -7,8 +8,8 @@ local DungeonHonor = CreateFrame("Frame")
 DungeonHonor:RegisterEvent("UPDATE_MOUSEOVER_UNIT")
 
 -- Function to fetch Dungeon Honor score from the lookup table
-local function GetDungeonHonorScore(playerName, playerRealm)
-    local key = string.lower(playerName) .. "-" .. string.lower(playerRealm)
+local function GetDungeonHonorScore(groupName)
+    local key = string.lower(groupName)
     -- print("Looking up: " .. (key or "nil"))
     return DungeonHonorData[key] or {
         score = nil,
@@ -31,31 +32,75 @@ local function GetColorForScore(score)
     end
 end
 
--- Function to add a styled message to the tooltip
-local function AddStyledMessageToTooltip()
-    -- Ensure the tooltip is showing a unit (e.g., a player or NPC)
-    if UnitExists("mouseover") and UnitIsPlayer("mouseover") then
-        local name, realm = UnitName("mouseover"), GetRealmName()
+-- Function to add a styled message to the Premade Group Finder tooltip
+local function AddStyledMessageToGroupTooltip(resultID)
+    if not resultID or type(resultID) ~= "number" then return end
 
-        local data = GetDungeonHonorScore(name, realm)
+    -- Fetch group info
+    local searchResultInfo = C_LFGList.GetSearchResultInfo(resultID)
+    if not searchResultInfo then return end
 
+    local leaderName = searchResultInfo.leaderName
+    if not leaderName then
         GameTooltip:AddLine(" ", 1, 1, 1) -- Empty line for spacing
-
-        if data.score then
-            local r, g, b = GetColorForScore(data.score)
-            GameTooltip:AddDoubleLine("Dungeon Honor Score", tostring(data.score), 1, 0.85, 0, r, g, b)
-            GameTooltip:AddDoubleLine("Received votes", tostring(data.votes), 1.0, 1.0, 1.0, 1, 1, 1)
-        else
-            GameTooltip:AddDoubleLine("Dungeon Honor Score:", "Not Found", 1, 0.85, 0, 0.5, 0.5, 0.5)
-        end
-
+        GameTooltip:AddDoubleLine("Dungeon Honor Score:", "Leader Unknown", 1, 0.85, 0, 0.5, 0.5, 0.5)
         GameTooltip:Show()
+        return
     end
+
+    -- Fetch Dungeon Honor data for the group leader
+    local data = GetDungeonHonorScore(leaderName)
+
+    -- Add Dungeon Honor info to the tooltip
+    GameTooltip:AddLine(" ", 1, 1, 1) -- Empty line for spacing
+
+    if data.score then
+        local r, g, b = GetColorForScore(data.score)
+        GameTooltip:AddDoubleLine("Dungeon Honor Score", tostring(data.score), 1, 0.85, 0, r, g, b)
+        GameTooltip:AddDoubleLine("Received votes", tostring(data.votes), 1.0, 1.0, 1.0, 1, 1, 1)
+    else
+        GameTooltip:AddDoubleLine("Dungeon Honor Score:", "Not Found", 1, 0.85, 0, 0.5, 0.5, 0.5)
+    end
+
+    GameTooltip:Show()
 end
 
--- Set the script for when the registered event occurs
+-- Hook into Premade Group Finder tooltips
+local function HookGroupFinderTooltips()
+    hooksecurefunc("LFGListUtil_SetSearchEntryTooltip", function(tooltip, resultID)
+        -- Ensure resultID is valid
+        if tooltip and resultID then
+            AddStyledMessageToGroupTooltip(resultID)
+        end
+    end)
+end
+
+-- Initialization
+DungeonHonor:RegisterEvent("ADDON_LOADED")
 DungeonHonor:SetScript("OnEvent", function(self, event, ...)
-    if event == "UPDATE_MOUSEOVER_UNIT" then
-        AddStyledMessageToTooltip()
+    if event == "ADDON_LOADED" then
+        local addonName = ...
+        if addonName == "DungeonHonor" then
+            HookGroupFinderTooltips()
+        end
+    elseif event == "UPDATE_MOUSEOVER_UNIT" then
+        -- Add message to the player tooltip
+        if UnitExists("mouseover") and UnitIsPlayer("mouseover") then
+            local name, realm = UnitName("mouseover"), GetRealmName()
+
+            local data = GetDungeonHonorScore(name, realm)
+
+            GameTooltip:AddLine(" ", 1, 1, 1) -- Empty line for spacing
+
+            if data.score then
+                local r, g, b = GetColorForScore(data.score)
+                GameTooltip:AddDoubleLine("Dungeon Honor Score", tostring(data.score), 1, 0.85, 0, r, g, b)
+                GameTooltip:AddDoubleLine("Received votes", tostring(data.votes), 1.0, 1.0, 1.0, 1, 1, 1)
+            else
+                GameTooltip:AddDoubleLine("Dungeon Honor Score:", "Not Found", 1, 0.85, 0, 0.5, 0.5, 0.5)
+            end
+
+            GameTooltip:Show()
+        end
     end
 end)
