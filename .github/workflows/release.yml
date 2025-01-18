@@ -78,14 +78,15 @@ jobs:
 
       - name: Zip Addon Files
         run: |
-          zip -r DungeonHonor.${{ env.GAME_VERSION_ID }}.zip src
+          cd src
+          zip -r DungeonHonor.${{ env.VERSION }}.zip .
         working-directory: ${{ github.workspace }}
 
       - name: Debug CurseForge Variables
         run: |
           echo "API Key: [REDACTED]"
           echo "Project ID: ${{ secrets.CURSEFORGE_PROJECT_ID }}"
-          echo "File Path: ${{ github.workspace }}/DungeonHonor.${{ env.GAME_VERSION_ID }}.zip"
+          echo "File Path: ${{ github.workspace }}/DungeonHonor.${{ env.VERSION }}.zip"
           echo "Changelog: ${{ env.CHANGELOG }}"
           echo "Game Version ID: ${{ env.GAME_VERSION_ID }}"
           echo "Release Type: ${{ github.event.inputs.release_type }}"
@@ -102,7 +103,7 @@ jobs:
       #   env:
       #     CURSEFORGE_API_KEY: ${{ secrets.CF_API_KEY }}
       #     CURSEFORGE_PROJECT_ID: ${{ secrets.CURSEFORGE_PROJECT_ID }}
-      #     FILE_PATH: ${{ github.workspace }}/DungeonHonor.${{ env.GAME_VERSION_ID }}.zip
+      #     FILE_PATH: ${{ github.workspace }}/DungeonHonor.${{ env.VERSION }}.zip
       #     CHANGELOG: ${{ env.CHANGELOG }}
       #     GAME_VERSION_ID: ${{ env.GAME_VERSION_ID }}
       #     RELEASE_TYPE: ${{ github.event.inputs.release_type || 'release' }}
