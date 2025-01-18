@@ -102,7 +102,7 @@ jobs:
         env:
           CURSEFORGE_API_KEY: ${{ secrets.CF_API_KEY }}
           CURSEFORGE_PROJECT_ID: ${{ secrets.CURSEFORGE_PROJECT_ID }}
-          FILE_PATH: ${{ github.workspace }}/DungeonHonor.${{ env.VERSION }}.zip
+          FILE_PATH: src/DungeonHonor.${{ env.VERSION }}.zip
           CHANGELOG: ${{ env.CHANGELOG }}
           GAME_VERSION_ID: ${{ env.GAME_VERSION_ID }}
           RELEASE_TYPE: ${{ github.event.inputs.release_type || 'release' }}
