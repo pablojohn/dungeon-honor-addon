@@ -10,7 +10,7 @@ DungeonHonor:RegisterEvent("UPDATE_MOUSEOVER_UNIT")
 -- Function to fetch Dungeon Honor score from the lookup table
 local function GetDungeonHonorScore(name, realm)
     local key = string.lower(name) .. "-" .. string.lower(realm)
-    print("Looking up: " .. (key or "nil"))
+    --print("Looking up: " .. (key or "nil"))
     return DungeonHonorData[key] or {
         score = nil,
         votes = nil
