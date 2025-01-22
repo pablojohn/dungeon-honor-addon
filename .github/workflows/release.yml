@@ -87,7 +87,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: DungeonHonor
-          path: src/DungeonHonor.${{ env.VERSION }}.zip
+          path: DungeonHonor.${{ env.VERSION }}.zip
 
       # - name: Upload to CurseForge
       #   env:
