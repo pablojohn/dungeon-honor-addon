@@ -79,8 +79,9 @@ jobs:
 
       - name: Zip Addon Files
         run: |
-          cd src
-          zip -r DungeonHonor.${{ env.VERSION }}.zip .
+          mkdir -p "DungeonHonor.${{ env.VERSION }}"
+          cp -r src/* "DungeonHonor.${{ env.VERSION }}/"
+          zip -r DungeonHonor.${{ env.VERSION }}.zip "DungeonHonor.${{ env.VERSION }}"
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
@@ -88,15 +89,15 @@ jobs:
           name: DungeonHonor
           path: src/DungeonHonor.${{ env.VERSION }}.zip
 
-      - name: Upload to CurseForge
-        env:
-          CURSEFORGE_API_KEY: ${{ secrets.CF_API_KEY }}
-          CURSEFORGE_PROJECT_ID: ${{ secrets.CURSEFORGE_PROJECT_ID }}
-          FILE_PATH: src/DungeonHonor.${{ env.VERSION }}.zip
-          CHANGELOG: ${{ env.CHANGELOG }}
-          GAME_VERSION: ${{ env.GAME_VERSION }}
-          RELEASE_TYPE: ${{ github.event.inputs.release_type || 'release' }}
-          VERSION: ${{ env.VERSION }}
-        run: |
-          python3 scripts/upload_to_curseforge.py
-        continue-on-error: false
+      # - name: Upload to CurseForge
+      #   env:
+      #     CURSEFORGE_API_KEY: ${{ secrets.CF_API_KEY }}
+      #     CURSEFORGE_PROJECT_ID: ${{ secrets.CURSEFORGE_PROJECT_ID }}
+      #     FILE_PATH: src/DungeonHonor.${{ env.VERSION }}.zip
+      #     CHANGELOG: ${{ env.CHANGELOG }}
+      #     GAME_VERSION: ${{ env.GAME_VERSION }}
+      #     RELEASE_TYPE: ${{ github.event.inputs.release_type || 'release' }}
+      #     VERSION: ${{ env.VERSION }}
+      #   run: |
+      #     python3 scripts/upload_to_curseforge.py
+      #   continue-on-error: false
