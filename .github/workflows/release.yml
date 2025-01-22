@@ -79,15 +79,15 @@ jobs:
 
       - name: Zip Addon Files
         run: |
-          mkdir -p "DungeonHonor.${{ env.VERSION }}"
-          cp -r src/* "DungeonHonor.${{ env.VERSION }}/"
-          zip -r DungeonHonor.${{ env.VERSION }}.zip "DungeonHonor.${{ env.VERSION }}"
+          mkdir -p "DungeonHonor"
+          cp -r src/* "DungeonHonor/"
+          zip -r DungeonHonor.zip "DungeonHonor"
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: DungeonHonor
-          path: DungeonHonor.${{ env.VERSION }}.zip
+          path: DungeonHonor.zip
 
       # - name: Upload to CurseForge
       #   env:
