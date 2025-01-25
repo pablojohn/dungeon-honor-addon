@@ -65,7 +65,7 @@ def get_player_data():
     # Calculate scores for each character
     for character_id in votes_count:
         # Extract character name and realm
-        character_name, character_realm = character_id.split("-")
+        character_name, character_realm = character_id.rsplit("-", maxsplit=1)
 
         # Filter data for the character
         behavior_keys = [
