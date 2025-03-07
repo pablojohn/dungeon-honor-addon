@@ -37,7 +37,7 @@ jobs:
 
       - name: Install Python dependencies
         run: |
-          pip install upstash-redis
+          pip install upstash-redis requests
 
       - name: Fetch and Update Data File
         run: |
